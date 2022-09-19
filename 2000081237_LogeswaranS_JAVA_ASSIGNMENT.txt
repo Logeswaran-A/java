@@ -1,0 +1,525 @@
+Q.1 Create a class SimpleInterest that has four data members that are principleAmount, rate of interest, time period, late penalty in percentage. Create two constructors, first accepts three arguments to initialize first three data members and the second accepts four arguments to initialize all data members. Calculation of penalty is on interest to paid and inputted in percentage. Now create a method to get final amount.
+
+************************************************************************Answer********************************************************
+
+
+package com.hexaware.assignment;
+import java.util.Scanner;
+
+public class SimpleInterest {
+     /*declaring the instance variables*/
+     private double principleAmount;
+     private double rateofInterest;
+     private double timePeriod;
+     private double latePenaltyPercentage;
+
+     /*Declaring the first constructor with 3 parameters*/
+    SimpleInterest(double pa,double roi,double tp){
+      this.principleAmount=pa;
+      this.rateofInterest=roi;
+      this.timePeriod=tp;
+    }
+
+    /* Declaring the second constructor with 4 parameters */
+    SimpleInterest(double pa,double roi,double tp,double lpp){
+        this(pa,roi,tp);
+        this.latePenaltyPercentage=lpp;
+      }
+
+    /**
+	 * This method is used to calculate and return the total amount
+	 * return type:- double
+	 * method-name:- getAmount
+	 */
+    double getAmount(){
+        double SI=(principleAmount*rateofInterest*timePeriod)/100;
+        double latePenaltyPercentageAmount=(latePenaltyPercentage/100)*SI;
+        double TotalAmount=principleAmount+SI+latePenaltyPercentageAmount;
+        return TotalAmount;
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("***************");
+        /*Taking input from the user */
+        System.out.println("Enter principle  Amount: ");
+        double principleAmount = sc.nextDouble();
+        System.out.println("Enter Time period(In Years): ");
+        double timePeriod = sc.nextDouble();
+        System.out.println("Enter principle  Rate of intrest(In Percentage): ");
+        double rateofInterest = sc.nextDouble();
+        
+  
+        /*Creating object S to call getAmount method with 3 parameters */
+        SimpleInterest S = new SimpleInterest(principleAmount,timePeriod,rateofInterest);
+        System.out.println("Total amount  is " +S.getAmount());
+        System.out.println("***************");
+        
+        System.out.println("***************");
+        /*Taking input from user */
+        System.out.println("Enter principle  Amount: ");
+        double principleAmount1 = sc.nextDouble();
+        System.out.println("Enter Time period(In Years): ");
+        double timePeriod1 = sc.nextDouble();
+        System.out.println("Enter principle  Rate of intrest(In Percentage): ");
+        double rateofInterest1 = sc.nextDouble();
+        System.out.println("Enter principle  Late penalty percentage(In Percentage): ");
+        double latePenaltyPercentage1 = sc.nextDouble();
+        
+        /*Creating object S1 to call getAmount method with 4 parameters */
+        SimpleInterest S1 = new SimpleInterest(principleAmount1,timePeriod1,rateofInterest1,latePenaltyPercentage1);
+        System.out.println("Total amount with penalty is " +S1.getAmount());
+        System.out.println("=***************");
+      
+        sc.close();
+    }
+}
+
+
+Commands to execute/run program.
+
+javac src\com\hexaware\assignment\SimpleInterest.java -d bin\
+cd bin\
+java com.hexaware.assignment.SimpleInterest
+
+Output
+
+===========================================================================================================
+Enter principle  Amount: 
+10000.0
+Enter Time period(In Years): 
+4.0
+Enter principle  Rate of intrest(In Percentage): 
+10.0
+Total amount  is 14000.0
+===========================================================================================================
+===========================================================================================================
+Enter principle  Amount:
+10000.0
+Enter Time period(In Years): 
+4.0
+Enter principle  Rate of intrest(In Percentage): 
+10.0
+Enter principle  Late penalty percentage(In Percentage): 
+2.5
+Total amount with penalty is 14250.0
+===========================================================================================================
+
+
+
+Q.2 Create a class named “FeeExpenses” that has data members tuition fee (in INR) and service tax (in percentage) as private members. Also it provides constructor to initialize data members. Apart from that it has one method “getTotalFee()” that calculate final fee based on these parameters. Now create a subclass “FeeWithCess” that inherits “FeeExpenses” and provides an additional data member that is cess (in percentage) as private member again. Override “getTotalFee()” method that will also add cess to final price. Call these methods to exhibit Run time polymorphism.
+
+
+****************************************************************Answer****************************************************************
+
+package com.hexaware.assignment;
+import java.util.Scanner;
+
+class FeeExpenses {
+
+    /*Declaring Instance variables */
+    private int tutionFee;
+    private  double serviceTax;
+
+    /*Two parameter Constructor */
+    public FeeExpenses(int tf,double st){
+        this.tutionFee=tf;
+        this.serviceTax=st;
+    }
+
+    /*Declaring Get method to return tutionFee */
+    public double gettutionFee(){
+        return tutionFee;
+    }
+
+    /*Declaring Get method to return serviceTax */
+    public double getserviceTax(){
+        return serviceTax;
+    }
+    
+    /*Method to calculate and return TotalFee */
+    public double getTotalFee(){
+        serviceTax=(serviceTax/100)*tutionFee;
+        double totalfee=tutionFee+serviceTax;
+        return totalfee;
+    }
+    
+    
+}
+
+/*Implementing inheritence */
+class FeewithCess extends FeeExpenses{
+    private double cess;//instance variable
+    
+     /*Declaring Constructor with 3 parameters */
+     FeewithCess(int tf,double st,double cs){
+        super(tf,st);
+        this.cess=cs;
+    }
+
+    /*Declaring Get method to return serviceTax */
+    public double getcess(){
+        return cess;
+    }
+    
+    /*Method to calculate total with cessFee */
+    @Override
+    public double getTotalFee(){
+        double totalfee = gettutionFee() + (gettutionFee() * (getserviceTax() / 100.0));
+        double cessFee = gettutionFee() * cess / 100.0;
+        return totalfee + cessFee;
+    }
+}
+public class demo{
+    public static void main(String[] args) {
+        Scanner sc =new Scanner(System.in);
+        System.out.println("*********");
+
+        /*Taking Input From User */
+        System.out.println("Enter tution fee: ");
+        int tutionFee = sc.nextInt();
+        System.out.println("Enter Service Tax(In percentage): ");
+        double serviceTax =sc.nextDouble();
+
+        /*Creating object to call getTotalfee method */
+        FeeExpenses FE = new FeeExpenses(tutionFee,serviceTax);
+        System.out.println("********");
+        System.out.println("Total fee amount for tution fee " +tutionFee+ "$ and service tax " +serviceTax+ "% is " +FE.getTotalFee());
+        System.out.println("********");
+        System.out.println();
+        System.out.println("********");
+
+        /*Taking Input From User */
+        System.out.println("Enter tution fee: ");
+        int tutionFee1 = sc.nextInt();
+        System.out.println("Enter Service Tax(In percentage): ");
+        double serviceTax1 =sc.nextDouble();
+        System.out.println("Enter cess tax(In percentage): ");
+        double cess =sc.nextDouble();
+
+         /*Creating object to call gettotalfee method */
+        FeeExpenses FE1 = new FeewithCess(tutionFee,serviceTax,cess);
+        System.out.println("********");
+        System.out.println("Total fee amount for tution fee " +tutionFee1+ "$ and service tax " +serviceTax1+ "% is and cess tax  " +cess+ "% is " +FE1.getTotalFee());
+        System.out.println("********");
+        
+        sc.close();
+        
+ }
+}
+
+Command to compile and Run
+
+javac src\com\hexaware\assignment\demo.java -d bin\
+cd bin
+java com.hexaware.assignment.demo
+
+Output
+
+===============================================================================================================
+Enter tution fee: 
+100000
+Enter Service Tax(In percentage): 
+5
+===============================================================================================================
+Total fee amount for tution fee 100000$ and service tax 5.% is 105000.0
+===============================================================================================================
+
+===============================================================================================================
+Enter tution fee: 
+150000
+Enter Service Tax(In percentage): 
+7.5
+Enter cess tax(In percentage): 
+0.5
+===============================================================================================================
+Total fee amount for tution fee 150000$ and service tax 7.5% is and cess tax  0.5% is 162000.0
+===============================================================================================================
+
+
+Q.3 Create an abstract class science that has two data members named chemMarks and phyMarks along with constructor and an abstract method that has following signature abstract double result(); Create two subclasses named Maths and Biology has data members maths_marks and bio_marks respectively. Implement abstract method and call abstract method that shows dynamic method dispatch.
+
+****************************************************************Answer****************************************************************
+
+package com.hexaware.assignment;
+import java.util.Scanner;
+
+/*Creating abstract class for Science */
+abstract class Science{
+    
+    /*Instance variables */
+    private double chemMarks;
+    private double phyMarks;
+    final private double totalmarks=300;
+    
+    /*Constructor with 2 parameteres */
+    Science(double cm,double pm){
+    this.chemMarks=cm;
+    this.phyMarks=pm;
+    }
+    
+    /*Get method to return totalMarks */
+    public double gettotalmarks(){
+        return totalMarks;
+    }
+
+     /*Get method to return chemMarks */
+    public double getchemMarks(){
+        return chemMarks;
+    }
+
+     /*Get method to return phyMarks */
+    public double getphyMarks(){
+        return phyMarks;
+    }
+
+    /*Abstract method result */
+    abstract double result();
+}
+
+class Maths extends Science{
+
+    /*Instance variables */
+    private double mathMarks;
+
+     /*Constructor with 3 parameteres */
+    Maths(double cm,double pm,double mm){
+        super(cm,pm);
+        this.mathMarks=mm;
+    }
+
+     /*Get method to return matMarks */
+    public double getmathMarks(){
+        return mathMarks;
+    }
+
+
+    /*Method to calculate total marks and return percentage */
+    @Override
+    double result() {
+        double result=((getchemMarks()+getphyMarks()+getmathMarks())/gettotalmarks())*100;
+        return result;
+    }
+}
+
+class Biology extends Science{
+
+    /*Instance variables */
+    private double bioTheoryMarks;
+    private double bioPracticalMarks;
+
+   
+    /*Constructor with 3 parameteres */
+    Biology(double cm,double pm,double btm,double bpm){
+    super(cm,pm);
+    this.bioTheoryMarks=btm;
+    this.bioPracticalMarks=bpm;
+    }
+
+    /*Get method to return bioTheorymarks */
+    public double getbioTheoryMarks(){
+        return bioTheoryMarks;
+    }
+
+    /*Get method to return matmarks */
+    public double getbioPracticalMarks(){
+        return bioPracticalMarks;
+    }
+
+
+    /*Method to calculate total marks and return percentage */
+    @Override
+    double result(){
+        double result=((getchemMarks()+getphyMarks()+getbioPracticalMarks()+getbioTheoryMarks())/gettotalmarks())*100;
+        return result;
+    }
+
+}
+
+public class MainClass {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        /*Taking Input From User */
+        System.out.println("********");
+        System.out.println("Enter marks of physics(out of 100): ");
+        double pm = sc.nextDouble();
+        System.out.println("Enter marks of chemistry(out of 100): ");
+        double cm = sc.nextDouble();
+        System.out.println("Enter marks of maths(out of 100): ");
+        double mm = sc.nextDouble();
+        System.out.println("********");
+
+        /*Creating object to call result method */
+        Maths TM = new Maths(pm,cm,mm);
+        System.out.println("The total percentage of student for Physics: " +pm+ " chemistry: " +cm+ " and Maths: " +mm+ " is " +TM.result());
+
+
+        /*Taking Input From User */
+        System.out.println("********");
+        System.out.println("Enter marks of physics(out of 100): ");
+        double pm1 = sc.nextDouble();
+        System.out.println("Enter marks of chemistry(out of 100): ");
+        double cm1 = sc.nextDouble();
+        System.out.println("Enter marks of Bio theory(out of 70): ");
+        double btm = sc.nextDouble();
+        System.out.println("Enter marks of Bio Practical(out of 30): ");
+        double bpm = sc.nextDouble();
+        System.out.println("********");
+
+         /*Creating object to call result method */
+        Biology TM1 = new Biology(pm,cm,btm,bpm);
+        System.out.println("The total percentage of student for Physics: " +pm1+ " chemistry: " +cm1+ " and Biology theory: " +btm+ " and Biology practical: " +bpm+ " is " +TM1.result());
+        sc.close();
+    }
+    
+}
+
+Command to Compile and run
+
+
+javac src\com\hexaware\assignment\MainClass.java -d bin\
+cd bin
+java com.hexaware.assignment.MainClass
+
+
+
+
+Output
+
+====================================================================================================
+Enter marks of physics(out of 100): 
+80
+Enter marks of chemistry(out of 100): 
+91
+Enter marks of maths(out of 100): 
+95
+====================================================================================================
+The total percentage of student for Physics: 80.0 chemistry: 91.0 and Maths: 95.0 is 88.67
+========================================
+Enter marks of physics(out of 100):
+98
+Enter marks of chemistry(out of 100): 
+89
+Enter marks of Bio theory(out of 70): 
+65
+Enter marks of Bio Practical(out of 30): 
+25
+====================================================================================================
+The total percentage of student for Physics: 98.0 chemistry: 89.0 and Biology theory: 65.0 and Biology practical: 25.0 is 92.33
+
+
+Q.4 Let us create a performance rating system to calculate the performance of each employee. Create an Employee class with an instance variable point: int with private access modifier. 
+Generate getter and setter method of the instance variable. 
+Create a class called "PerformanceRating" keep four class variables with constant value and private access modifier: Outstanding: int with value 5, Good: int with value 4, Average: int with value 3 and Poor: int with value 2. 
+Create a static method to calculate the performance of each employee.
+
+********Answer********
+
+package com.hexaware.assignment;
+import java.util.Scanner;
+
+
+class Employee{
+
+    /*Declaring instance variables */
+    private int point;
+
+    /*Declaring setter method */
+    public void setpoint(int pt){
+        this.point=pt;
+    }
+
+    /*Decaring getter Method */
+    public int getpoint(){
+        return point;
+    }
+}
+
+class PerformanceRating{
+
+    //Create constant variables in private and static and initialise the values 
+    final static int Outstanding = 5;
+	final static int Good = 4;
+	final static int Average = 3;
+	final static int Poor = 2;
+
+
+    /*Declaring Method to obtain performance of employee */
+    static String getPerformanceRating(Employee e){
+    int point = e.getpoint(); 
+    String rating=null;
+    if(point <= 100){
+        if(point>=80 && point<=100){
+            rating="outstanding";
+        }
+        if(point >= 60 && point <= 79) {
+            rating = "good";
+        }
+        if(point >= 50 && point <= 59){
+            rating = "average";
+        } 
+        if (point >= 1 && point<= 49){
+         rating = "poor";
+        }
+    }
+    return rating;
+      
+    }
+}
+public class PerformanceCalculator {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        /*Declaring array of objects */
+        Employee[] arr;
+        arr = new Employee[3];
+
+        /*Taking input from users */
+        System.out.println("********");
+        System.out.println("Enter points of Employee-1:  ");
+        int pt1 = sc.nextInt();
+        System.out.println("Enter points of Employee-2:  ");
+        int pt2 = sc.nextInt();
+        System.out.println("Enter points of Employee-3:  ");
+        int pt3 = sc.nextInt();
+
+        System.out.println("********");
+
+        /*calling the method using object */
+        arr[0]=new Employee();
+        arr[0].setpoint(pt1);
+        System.out.println("The rating of Employee-1 is: " +PerformanceRating.getPerformanceRating(arr[0]));
+        arr[1]=new Employee();
+        arr[1].setpoint(pt2);
+        System.out.println("The rating of Employee-2 is: " +PerformanceRating.getPerformanceRating(arr[1]));
+        arr[2]=new Employee();
+        arr[2].setpoint(pt3);
+        System.out.println("The rating of Employee-3 is: " +PerformanceRating.getPerformanceRating(arr[2]));
+        System.out.println("=********");
+
+        sc.close();
+
+    }
+}
+
+
+Command to compile and run the program
+
+javac src\com\hexaware\assignment\PerformanceCalculator.java -d bin\
+cd bin
+java com.hexaware.assignment.PerformanceCalculator
+
+Output
+
+=============================================================================================================
+Enter points of Employee-1:  
+75
+Enter points of Employee-2:  
+85
+Enter points of Employee-3:  
+35
+=============================================================================================================
+The rating of Employee-1 is: good
+The rating of Employee-2 is: outstanding
+The rating of Employee-3 is: poor
+=============================================================================================================
